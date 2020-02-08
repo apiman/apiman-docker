@@ -1,0 +1,29 @@
+version: '3'
+services:
+# Don't forget to create the apiman realm http://www.apiman.io/latest/production-guide.html
+  apiman-manager:
+    image: "apiman/on-wildfly11-manager:latest"
+    container_name: apiman-manager
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+    environment:
+      APIMAN_ES_PROTOCOL: http
+      APIMAN_ES_HOST: localhost
+      APIMAN_ES_PORT: 9200
+      APIMAN_AUTH_PUBLIC_KEY: "APIMAN_REALM_PUBLIC_KEY"
+      APIMAN_AUTH_SERVER_URL: http://keycoak.host:8080/auth
+      APIMAN_AUTH_MANAGER_SECRET: keycloak-apiman-secret
+      APIMAN_AUTH_UI_SECRET: keycloak-apimanui-secret
+      APIMAN_HIBERNATE_DIALECT: apiman-hibernate-dialect
+      APIMAN_DB_CONNECTION_URL: db-connection-string
+      APIMAN_DB_USER_NAME: db-user-name
+      APIMAN_DB_PASSWORD: db-user-password
+      APIMAN_DB_VENDOR: db-vendor
+    ports:
+      - "9990:9990"
+      - "9993:9993"
+      - "8080:8080"
+      - "8443:8443"

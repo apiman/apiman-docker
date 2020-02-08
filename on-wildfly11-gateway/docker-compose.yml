@@ -1,0 +1,24 @@
+version: '3'
+services:
+# Don't forget to create the apiman realm http://www.apiman.io/latest/production-guide.html
+  apiman-gateway:
+    image: "apiman/on-wildfly11-gateway:latest"
+    container_name: apiman-gateway
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+    environment:
+      APIMAN_ES_PROTOCOL: http
+      APIMAN_ES_HOST: localhost
+      APIMAN_ES_PORT: 9200
+      APIMAN_GATEWAY_PUBLIC_ENDPOINT: http://apiman-gateway.host:8080/apiman-gateway/
+      APIMAN_AUTH_PUBLIC_KEY: "APIMAN_REALM_PUBLIC_KEY"
+      APIMAN_AUTH_SERVER_URL: http://keycoak.host:8080/auth
+      APIMAN_AUTH_GATEWAY_SECRET: keycloak-apiman-gateway-secret
+    ports:
+      - "9990:9990"
+      - "9993:9993"
+      - "8080:8080"
+      - "8443:8443"
