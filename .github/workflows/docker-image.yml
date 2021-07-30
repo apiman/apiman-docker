@@ -44,7 +44,6 @@ jobs:
           docker push apiman/cli:latest
           docker push apiman/vertx-openshift:latest
           docker push apiman/vertx-standalone:latest
-          docker push apiman/migration-assistant:latest
 
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
           docker push ghcr.io/apiman/cli:latest
