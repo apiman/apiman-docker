@@ -27,6 +27,8 @@ RUN groupadd -r tomcat && \
     apt-get install -y unzip && \
     apt-get clean
 
+ADD https://jdbc.postgresql.org/download/postgresql-42.2.23.jar $CATALINA_HOME/lib
+
 WORKDIR $CATALINA_HOME
 RUN unzip -o /tmp/apiman-overlay.zip && \
     rm /tmp/apiman-overlay.zip && \
