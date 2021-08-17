@@ -5,6 +5,8 @@ EXPOSE 8080 8443
 
 ARG APIMAN_VERSION
 
+ADD https://jdbc.postgresql.org/download/postgresql-42.2.23.jar $JBOSS_HOME/standalone/deployments
+
 USER root
 WORKDIR $JBOSS_HOME
 RUN curl -L https://github.com/Apiman/apiman/releases/download/$APIMAN_VERSION/apiman-distro-wildfly-$APIMAN_VERSION-overlay.zip | bsdtar -xvf- && \

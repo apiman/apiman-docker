@@ -9,6 +9,8 @@ USER root
 ADD https://github.com/Apiman/apiman/releases/download/$APIMAN_VERSION/apiman-distro-tomcat-$APIMAN_VERSION-overlay.zip $CATALINA_HOME
 RUN groupadd -r tomcat && useradd --no-log-init -r -g tomcat tomcat
 
+ADD https://jdbc.postgresql.org/download/postgresql-42.2.23.jar $CATALINA_HOME/lib
+
 WORKDIR $CATALINA_HOME
 RUN apt-get update && \
     apt-get install -y unzip && \
