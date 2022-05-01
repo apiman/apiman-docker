@@ -1,4 +1,4 @@
-FROM tomcat:9.0.62-jdk11-temurin
+FROM tomcat:10.1.0-jdk11-temurin
 
 MAINTAINER florian.volk@scheer-group.com
 EXPOSE 8080 8443
