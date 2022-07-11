@@ -20,7 +20,7 @@ ADD $APIMAN_DISTRO /tmp/apiman-overlay.zip
 
 USER root
 WORKDIR $JBOSS_HOME
-RUN unzip /tmp/apiman-overlay.zip && \
+RUN unzip -o /tmp/apiman-overlay.zip && \
     rm -rf $JBOSS_HOME/standalone/deployments/apiman-ds.xml && \
     rm -rf $JBOSS_HOME/standalone/deployments/apiman-gateway-ds.xml && \
     rm -rf $JBOSS_HOME/standalone/deployments/apiman-gateway.war && \
