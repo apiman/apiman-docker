@@ -9,7 +9,7 @@ LABEL org.opencontainers.image.authors="florian.volk@scheer-group.com,marc@black
 LABEL org.opencontainers.image.licenses="Apache-2.0"
 LABEL org.opencontainers.image.url="https://www.apiman.io"
 LABEL org.opencontainers.image.source="https://www.github.com/apiman/apiman"
-LABEL org.opencontainers.image.title="Apiman Manager (Wildfly distro)"
+LABEL org.opencontainers.image.title="Apiman Manager (WildFly distro)"
 LABEL org.opencontainers.image.description="Apiman Manager API and UI (WildFly distro)"
 LABEL org.opencontainers.image.version=$APIMAN_VERSION
 
