@@ -1,7 +1,7 @@
 ARG BASE_IMAGE=tomcat:9.0.64-jdk11-temurin
 FROM $BASE_IMAGE
 
-ARG APIMAN_VERSION=
+ARG APIMAN_VERSION
 ARG APIMAN_DISTRO=https://github.com/apiman/apiman/releases/download/$APIMAN_VERSION/apiman-distro-tomcat-$APIMAN_VERSION-overlay.zip
 ARG POSTGRES_VERSION=42.3.0
 

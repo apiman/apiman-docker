@@ -1,7 +1,7 @@
 ARG BASE_IMAGE=eclipse-temurin:11-jre-alpine
 FROM $BASE_IMAGE
 
-ARG APIMAN_VERSION=3.0.0-SNAPSHOT
+ARG APIMAN_VERSION
 ARG APIMAN_DISTRO=https://github.com/apiman/apiman/releases/download/$APIMAN_VERSION/apiman-distro-vertx-$APIMAN_VERSION.zip
 
 LABEL org.opencontainers.image.authors="florian.volk@scheer-group.com"
