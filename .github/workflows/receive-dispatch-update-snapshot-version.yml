@@ -32,7 +32,7 @@ jobs:
           fi
 
       - name: Commit release snapshot update to repository (if version changed)
-        uses: EndBug/add-and-commit@v7.2.1
+        uses: EndBug/add-and-commit@v9.0.1
         if: ${{ needs.read-version.outputs.snapshot-version-changed }}
         with:
           author_name: apiman-ci

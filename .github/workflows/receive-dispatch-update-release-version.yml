@@ -21,7 +21,7 @@ jobs:
         run: git tag -a -m "Apiman Docker ${{ github.event.client_payload.release-version }}" ${{ github.event.client_payload.release-version }}
 
       - name: Commit release version update to repository
-        uses: EndBug/add-and-commit@v7.2.1
+        uses: EndBug/add-and-commit@v9.0.1
         with:
           author_name: apiman-ci
           default_author: user_info
