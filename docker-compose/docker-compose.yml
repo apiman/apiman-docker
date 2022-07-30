@@ -30,9 +30,8 @@ services:
       - postgres
       - keycloak
     volumes:
-      - type: bind
-        source: "$PWD/data/apiman.properties"
-        target: /opt/jboss/wildfly/standalone/configuration/apiman.properties
+      - "$PWD/data/apiman.properties:/opt/jboss/wildfly/standalone/configuration/apiman.properties"
+      - "$PWD/data/default-gateway.json:/opt/jboss/wildfly/standalone/data/bootstrap/default-gateway.json"
     logging:
       driver: "json-file"
       options:
