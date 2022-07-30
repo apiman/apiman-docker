@@ -12,8 +12,8 @@ Apiman Docker repo: https://www.github.com/apiman/apiman-docker
 
 === Getting running
 
-* Initialise secrets and keys: `./setup.sh`.
-** This should be run *before* starting docker-compose.
+* Initialise secrets and keys by running: `docker-compose -f docker-compose.setup.yml up` or `setup.sh`.
+** This should be run *before* starting the main docker-compose, and only needs to be run once.
 ** We will generate self-signed RSA certificates for you to use in Keycloak.
 +
 The default keysize is 2048 bits. Set the `RSA_KEY_SIZE` environment variable
