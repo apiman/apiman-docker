@@ -53,7 +53,8 @@ services:
   apiman-gateway:
     image: apiman/vertx-gateway:3.0.0-SNAPSHOT
     depends_on:
-      - elasticsearch
+      elasticsearch:
+          condition: service_healthy
     environment:
       - >-
         APIMAN_GATEWAY_OPTS=-Dapiman.es.host=${ELASTICSEARCH_HOST}
@@ -86,7 +87,7 @@ services:
     volumes:
       - type: bind
         source: "$PWD/data/conf-es.json"
-        target: /opt/apiman/configs/conf-es.json"
+        target: /opt/apiman/configs/conf-es.json
       - type: volume
         source: gateway_logs
         target: /usr/src/apiman/apiman-distro-vertx/logs
