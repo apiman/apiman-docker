@@ -203,10 +203,12 @@ services:
         ./bin/kc.sh start-dev --import-realm --log=console
     environment:
       # Import realm with these secrets at first startup
-      - 'KEYCLOAK_REALM=${KEYCLOAK_APIMAN_API_SECRET}'
+      - 'KEYCLOAK_REALM=${KEYCLOAK_REALM}'
       - 'KEYCLOAK_APIMAN_API_SECRET=${KEYCLOAK_APIMAN_API_SECRET}'
       - 'KEYCLOAK_APIMAN_UI_SECRET=${KEYCLOAK_APIMAN_UI_SECRET}'
       - 'KEYCLOAK_GATEWAY_SECRET=${KEYCLOAK_GATEWAY_SECRET}'
+      - 'KEYCLOAK_REALM_CERTIFICATE=${KEYCLOAK_REALM_CERTIFICATE}'
+      - 'KEYCLOAK_REALM_PRIVATE_KEY=${KEYCLOAK_REALM_PRIVATE_KEY}'
       # Keycloak default admin username and password
       - 'KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN_USERNAME}'
       - 'KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}'
