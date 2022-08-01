@@ -18,8 +18,6 @@ EXPOSE 8080 8443
 ADD https://jdbc.postgresql.org/download/postgresql-$POSTGRES_VERSION.jar $JBOSS_HOME/standalone/deployments
 ADD $APIMAN_DISTRO /tmp/apiman-overlay.zip
 
-ADD https://jdbc.postgresql.org/download/postgresql-42.2.23.jar $JBOSS_HOME/standalone/deployments
-
 USER root
 WORKDIR $JBOSS_HOME
 RUN unzip -o /tmp/apiman-overlay.zip && \
