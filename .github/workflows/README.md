@@ -10,7 +10,7 @@ If new images are added to the repository, then this workflow should be updated.
 
 Callers can decide which Apiman version to use, and whether to push the images to the Docker repos, hence this workflow can be in a 'build-only' mode if desired. 
 
-### `update-release-version`
+### `receive-dispatch-update-release-version`
 
 Receives a repository dispatch event from the main Apiman repository containing a new version. This is typically used after a release.
 
@@ -19,7 +19,7 @@ Receives a repository dispatch event from the main Apiman repository containing 
 * Tags the commit with the version
 * Creates a new GitHub release
 
-### `update-snapshot-version`
+### `receive-dispatch-update-snapshot-version`
 
 Receives a repository dispatch event from the main Apiman repository containing a new snapshot version. 
 
