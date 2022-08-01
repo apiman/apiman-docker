@@ -1,19 +1,6 @@
 {
   "variables": {
     "apiman": {
-      "es": {
-        //"timeout": 10000,
-        //"pollingTime": 600
-        // only for https
-        //"truststore": {
-        //  "path": "/usr/src/apiman/apiman-distro-vertx/apiman.jks",
-        //  "password": "secret"
-        //},
-        //"keystore": {
-        //  "path": "/usr/src/apiman/apiman-distro-vertx/apiman.jks",
-        //  "password": "secret"
-        //}
-      }
     }
   },
 
@@ -41,8 +28,8 @@
 //          "path": "${apiman.gateway-es-keystore:-/opt/java/openjdk/lib/security/cacerts}",
 //          "password": "${apiman.truststore-password:-changeit}"
 //        }
-        //"cache-polling-interval": 15
-        //"indexPrefix": ""
+//        "cache-polling-interval": 15
+//        "indexPrefix": ""
       }
     }
   },
@@ -302,17 +289,17 @@
   },
 
   // SSL configuration to the gateway's *front end* (i.e. client <-> gateway).
-//  "ssl": {
-//    "keystore": {
-//      "path": "${apiman.gateway-client-keystore:-/opt/java/openjdk/lib/security/cacerts}",
-//      "password": "${apiman.truststore-password:-changeit}"
-//    },
-//    "truststore": {
-//      "path": "${apiman.gateway-client-truststore:-/opt/java/openjdk/lib/security/cacerts}",
-//      "password": "${apiman.truststore-password:-changeit}"
-//    },
-//    "allowedProtocols": "${apiman.gateway-allowedProtocols}"
-//  },
+  "ssl": {
+    "keystore": {
+      "path": "${apiman.gateway-client-keystore:-/opt/java/openjdk/lib/security/cacerts}",
+      "password": "${apiman.truststore-password:-changeit}"
+    },
+    "truststore": {
+      "path": "${apiman.gateway-client-truststore:-/opt/java/openjdk/lib/security/cacerts}",
+      "password": "${apiman.truststore-password:-changeit}"
+    },
+    "allowedProtocols": "${apiman.gateway-allowedProtocols}"
+  },
 
   // Gateway API Authentication. See documentation for further possibilities..
   "auth": {
@@ -332,15 +319,14 @@
       // even if your client is not set to "confidential". Leave this dummy section if you're using non-confidential.
       "credentials": {
         "secret": "${keycloak.gateway.secret}"
-      }
-      //"truststore": "${apiman.gateway-keycloak-truststore:-/opt/java/openjdk/lib/security/cacerts}",
-      //"truststore-password": "${apiman.truststore-password:-changeit}",
-      //"client-keystore": "${apiman.gateway-keycloak-keystore:-/opt/java/openjdk/lib/security/cacerts}",
-      //"client-keystore-password": "${apiman.truststore-password:-changeit}"
-      // End paste here
+      },
+      "truststore": "${apiman.gateway-keycloak-truststore:-/opt/java/openjdk/lib/security/cacerts}",
+      "truststore-password": "${apiman.truststore-password:-changeit}",
+      "client-keystore": "${apiman.gateway-keycloak-keystore:-/opt/java/openjdk/lib/security/cacerts}",
+      "client-keystore-password": "${apiman.truststore-password:-changeit}"
     }
   },
 
   // When reporting an API's endpoint, prefer secure (i.e. https). You should probably change this after enabling HTTPS.
-  "preferSecure": true
+  "preferSecure": false
 }

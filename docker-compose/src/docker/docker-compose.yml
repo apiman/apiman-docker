@@ -2,7 +2,12 @@ version: '3.9'
 # Please refer to the .env file (it might be hidden by default on your OS).
 services:
   apiman-manager:
-    image: apiman/wildfly-manager:3.0.0-SNAPSHOT
+    image: apiman/wildfly-manager:${project.version}
+    # ports:
+    #   - '8443:8080'
+    depends_on:
+      - postgres
+      - keycloak
     environment:
       # Keycloak SSO config
       - "APIMAN_AUTH_URL=${KEYCLOAK_URL}"
@@ -12,8 +17,8 @@ services:
       # Apiman Manager database config
       - "APIMAN_DB_DRIVER=postgresql9"
       - "APIMAN_DB_URL=jdbc:postgresql://postgres:5432/apiman"
-      - "APIMAN_DB_USERNAME=postgres"
-      - "APIMAN_DB_PASSWORD=admin123!"
+      - "APIMAN_DB_USERNAME=${POSTGRES_USERNAME}"
+      - "APIMAN_DB_PASSWORD=${POSTGRES_PASSWORD}"
       # Apiman Elasticsearch metrics config
       - "APIMAN_ES_PROTOCOL=${ELASTICSEARCH_PROTOCOL}"
       - "APIMAN_ES_HOST=${ELASTICSEARCH_HOST}"
@@ -24,14 +29,13 @@ services:
      # - "APIMAN_ES_PASSWORD="
       # General Apiman config
       - "ALLOW_ANY_HOST=${SELF_SIGNED}"
-    # ports:
-    #   - '8443:8080'
-    depends_on:
-      - postgres
-      - keycloak
     volumes:
-      - "$PWD/data/apiman.properties:/opt/jboss/wildfly/standalone/configuration/apiman.properties"
-      - "$PWD/data/default-gateway.json:/opt/jboss/wildfly/standalone/data/bootstrap/default-gateway.json"
+      - type: bind
+        source: "$PWD/data/apiman.properties"
+        target: /opt/jboss/wildfly/standalone/configuration/apiman.properties
+      - type: bind
+        source: "$PWD/data/default-gateway.json"
+        target: /opt/jboss/wildfly/standalone/data/bootstrap/default-gateway.json
     logging:
       driver: "json-file"
       options:
@@ -50,11 +54,15 @@ services:
       test: curl -s -f http://apiman-manager:8080/apiman/system/status &>/dev/null; if [[ $$? == 0 ]]; then echo 0; else echo 1; fi
 
   apiman-gateway:
-    image: apiman/vertx-gateway:3.0.0-SNAPSHOT
+    image: apiman/vertx-gateway:${project.version}
+    # ports:
+    #   - '${GATEWAY_PORT}:${GATEWAY_PORT}'
+    #   - '${GATEWAY_MANAGEMENT_PORT}:8081'
     depends_on:
       elasticsearch:
           condition: service_healthy
     environment:
+     # You can add these below (and modify conf-es.json) to customise SSL/TLS
       - >-
         APIMAN_GATEWAY_OPTS=-Dapiman.es.host=${ELASTICSEARCH_HOST}
         -Dapiman.es.protocol=${ELASTICSEARCH_PROTOCOL}
@@ -71,18 +79,15 @@ services:
         -Dkeycloak.realm-public-key=${KEYCLOAK_REALM_PUBLIC_KEY}
         -Dkeycloak.gateway.secret=${KEYCLOAK_GATEWAY_SECRET}
         -DcachingPolicy.maxCacheSize=${MAX_CACHE_SIZE_IN_MB}
-        -Dapiman.gateway-backend-keystore=${KEYSTORE_TRUSTSTORE_PATH:-}${GATEWAY_BACKEND_KEYSTORE:-/usr/src/apiman/apiman-distro-vertx/certs/apiman.jks}
-        -Dapiman.gateway-backend-truststore=${KEYSTORE_TRUSTSTORE_PATH:-}${GATEWAY_BACKEND_TRUSTSTORE:-/usr/src/apiman/apiman-distro-vertx/certs/apiman.jks}
-        -Dapiman.gateway-client-keystore=${KEYSTORE_TRUSTSTORE_PATH:-}${GATEWAY_CLIENT_KEYSTORE:-/usr/src/apiman/apiman-distro-vertx/certs/apiman.jks}
-        -Dapiman.gateway-client-truststore=${KEYSTORE_TRUSTSTORE_PATH:-}${GATEWAY_CLIENT_TRUSTSTORE:-/usr/src/apiman/apiman-distro-vertx/certs/apiman.jks}
-        -Dapiman.gateway-es-keystore=${KEYSTORE_TRUSTSTORE_PATH:-}${GATEWAY_ES_KEYSTORE:-/usr/src/apiman/apiman-distro-vertx/certs/apiman.jks}
-        -Dapiman.gateway-es-truststore=${KEYSTORE_TRUSTSTORE_PATH:-}${GATEWAY_ES_TRUSTSTORE:-/usr/src/apiman/apiman-distro-vertx/certs/apiman.jks}
-        -Dapiman.gateway-keycloak-keystore=${KEYSTORE_TRUSTSTORE_PATH:-}${GATEWAY_KEYCLOAK_KEYSTORE:-/usr/src/apiman/apiman-distro-vertx/certs/apiman.jks}
-        -Dapiman.gateway-keycloak-truststore=${KEYSTORE_TRUSTSTORE_PATH:-}${GATEWAY_KEYCLOAK_TRUSTSTORE:-/usr/src/apiman/apiman-distro-vertx/certs/apiman.jks}
         -Dapiman.gateway-allowedProtocols=${TLS_ALLOWED_PROTOCOLS:-}
-    # ports:
-    #   - '${GATEWAY_PORT}:${GATEWAY_PORT}'
-    #   - '${GATEWAY_MANAGEMENT_PORT}:8081'
+        -Dapiman.gateway-backend-keystore=${KEYSTORE_TRUSTSTORE_PATH:-}${GATEWAY_BACKEND_KEYSTORE:-}
+        -Dapiman.gateway-backend-truststore=${KEYSTORE_TRUSTSTORE_PATH:-}${GATEWAY_BACKEND_TRUSTSTORE:-}
+        -Dapiman.gateway-client-keystore=${KEYSTORE_TRUSTSTORE_PATH:-}${GATEWAY_CLIENT_KEYSTORE:-}
+        -Dapiman.gateway-client-truststore=${KEYSTORE_TRUSTSTORE_PATH:-}${GATEWAY_CLIENT_TRUSTSTORE:-}
+        -Dapiman.gateway-es-keystore=${KEYSTORE_TRUSTSTORE_PATH:-}${GATEWAY_ES_KEYSTORE:-}
+        -Dapiman.gateway-es-truststore=${KEYSTORE_TRUSTSTORE_PATH:-}${GATEWAY_ES_TRUSTSTORE:-}
+        -Dapiman.gateway-keycloak-keystore=${KEYSTORE_TRUSTSTORE_PATH:-}${GATEWAY_KEYCLOAK_KEYSTORE:-}
+        -Dapiman.gateway-keycloak-truststore=${KEYSTORE_TRUSTSTORE_PATH:-}${GATEWAY_KEYCLOAK_TRUSTSTORE:-}
     volumes:
       - type: bind
         source: "$PWD/data/conf-es.json"
@@ -90,6 +95,7 @@ services:
       - type: volume
         source: gateway_logs
         target: /usr/src/apiman/apiman-distro-vertx/logs
+
     logging:
       driver: "json-file"
       options:
@@ -114,16 +120,16 @@ services:
     restart: always
 
   postgres:
-    image: postgres:11.16
+    image: postgres:14.4
     # ports:
     #   - '5432:5432'
     environment:
       - 'POSTGRES_MULTIPLE_DATABASES=apiman,${POSTGRES_KEYCLOAK_DATABASE}'
-      - 'POSTGRES_USER=${POSTGRES_USER}'
+      - 'POSTGRES_USERNAME=${POSTGRES_USERNAME}'
       - 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}'
     volumes:
       - type: bind
-        source: $PWD/common/create-multiple-postgresql-databases.sh
+        source: "$PWD/common/create-multiple-postgresql-databases.sh"
         target: /docker-entrypoint-initdb.d/create-multiple-postgresql-databases.sh
       - type: volume
         source: postgres_data
@@ -149,13 +155,13 @@ services:
 
   elasticsearch:
     image: elasticsearch:7.13.4
+    #ports:
+    #  - '${ELASTICSEARCH_PORT}:${ELASTICSEARCH_PORT}'
     environment:
       - discovery.type=single-node
       - bootstrap.memory_lock=true
       - ES_JAVA_OPTS=-Xms${ELASTICSEARCH_JAVA_MEMORY} -Xmx${ELASTICSEARCH_JAVA_MEMORY}
       - xpack.security.enabled=false
-    #ports:
-    #  - '${ELASTICSEARCH_PORT}:${ELASTICSEARCH_PORT}'
     ulimits:
       memlock:
         soft: -1
@@ -191,6 +197,8 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:18.0.2
+    depends_on:
+      - postgres
     entrypoint: [ '/bin/bash', '-c' ]
     # ./bin/kc.sh build => build and deploy custom themes, providers, etc.
     # ./bin/kc.sh start-dev --import-realm => import Apiman realm, if not already imported.
@@ -227,12 +235,13 @@ services:
       - 'JDBC_PARAMS="useSSL=false"'
       # General KC config
       - 'KC_HEALTH_ENABLED=true'
-    depends_on:
-      - postgres
     volumes:
       - type: bind
-        source: $PWD/data/apiman-realm-for-keycloak.json
+        source: "$PWD/data/apiman-realm-for-keycloak.json"
         target: /opt/keycloak/data/import/apiman-realm-for-keycloak.json
+      - type: bind
+        source: "$PWD/data/apiman-keycloak-theme.jar"
+        target: /opt/keycloak/providers/apiman-keycloak-theme.jar
     logging:
       driver: "json-file"
       options:

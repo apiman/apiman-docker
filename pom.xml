@@ -12,32 +12,7 @@
   </properties>
 
   <artifactId>apiman-docker</artifactId>
-  <version>${revision}</version>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>11</source>
-          <target>11</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.passay</groupId>
-      <artifactId>passay</artifactId>
-      <version>${version.org.passay}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.keycloak</groupId>
-      <artifactId>keycloak-common</artifactId>
-    </dependency>
-  </dependencies>
+  <version>3.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Docker assets for apiman</name>
@@ -91,5 +66,21 @@
       </roles>
     </developer>
   </developers>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.passay</groupId>
+      <artifactId>passay</artifactId>
+      <version>${version.org.passay}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.keycloak</groupId>
+      <artifactId>keycloak-common</artifactId>
+    </dependency>
+  </dependencies>
+
+ <modules>
+   <module>docker-compose</module>
+ </modules>
 </project>
 

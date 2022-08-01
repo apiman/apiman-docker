@@ -4,7 +4,7 @@ This Apiman Docker Compose quickstart distro allows you to try out Apiman an arc
 
 Please ensure you change any default passwords before going to production.
 
-If you have feedback, please leave it on https://github.com/apiman/apiman/discussions[Apiman Discussions^] on GitHub.
+Please leave feedback on https://github.com/apiman/apiman/discussions[Apiman Discussions^] on GitHub.
 
 Main Apiman repo: https://www.github.com/apiman/apiman
 
