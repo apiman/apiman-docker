@@ -12,7 +12,7 @@ Apiman Docker repo: https://www.github.com/apiman/apiman-docker
 
 === Getting running
 
-* Initialise secrets and keys by running: `docker-compose -f docker-compose.setup.yml up` or `setup.sh`.
+* Initialise secrets and keys by running: `docker-compose -f docker-compose.setup.yml up`.
 ** This should be run *before* starting the main docker-compose, and only needs to be run once.
 ** We will generate self-signed RSA certificates for you to use in Keycloak.
 +

@@ -289,17 +289,17 @@
   },
 
   // SSL configuration to the gateway's *front end* (i.e. client <-> gateway).
-  "ssl": {
-    "keystore": {
-      "path": "${apiman.gateway-client-keystore:-/opt/java/openjdk/lib/security/cacerts}",
-      "password": "${apiman.truststore-password:-changeit}"
-    },
-    "truststore": {
-      "path": "${apiman.gateway-client-truststore:-/opt/java/openjdk/lib/security/cacerts}",
-      "password": "${apiman.truststore-password:-changeit}"
-    },
-    "allowedProtocols": "${apiman.gateway-allowedProtocols}"
-  },
+//  "ssl": {
+//    "keystore": {
+//      "path": "${apiman.gateway-client-keystore:-/your/keystore/here}",
+//      "password": "${apiman.truststore-password:-changeit}"
+//    },
+//    "truststore": {
+//      "path": "${apiman.gateway-client-truststore:-/opt/java/openjdk/lib/security/cacerts}",
+//      "password": "${apiman.truststore-password:-changeit}"
+//    },
+//    "allowedProtocols": "${apiman.gateway-allowedProtocols}"
+//  },
 
   // Gateway API Authentication. See documentation for further possibilities..
   "auth": {
@@ -321,9 +321,9 @@
         "secret": "${keycloak.gateway.secret}"
       },
       "truststore": "${apiman.gateway-keycloak-truststore:-/opt/java/openjdk/lib/security/cacerts}",
-      "truststore-password": "${apiman.truststore-password:-changeit}",
-      "client-keystore": "${apiman.gateway-keycloak-keystore:-/opt/java/openjdk/lib/security/cacerts}",
-      "client-keystore-password": "${apiman.truststore-password:-changeit}"
+      "truststore-password": "${apiman.truststore-password:-changeit}"
+//      "client-keystore": "${apiman.gateway-keycloak-keystore:-/your/keystore/here}",
+//      "client-keystore-password": "${apiman.truststore-password:-changeit}"
     }
   },
 

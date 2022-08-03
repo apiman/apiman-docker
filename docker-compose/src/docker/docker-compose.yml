@@ -256,6 +256,11 @@ services:
       - traefik.http.services.keycloak-service.loadbalancer.server.port=8080
     restart: always
 
+  mock-mail-server:
+    image: maildev/maildev:2.0.5
+    ports:
+      - "1080:1080"
+
   reverse-proxy:
     image: traefik:v2.8.1
     command:
