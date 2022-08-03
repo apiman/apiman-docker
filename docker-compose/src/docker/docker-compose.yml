@@ -194,7 +194,7 @@ services:
       - traefik.http.services.elasticsearch-service.loadbalancer.server.port=9200
 
   keycloak:
-    image: quay.io/keycloak/keycloak:18.0.2
+    image: quay.io/keycloak/keycloak:19.0.1
     depends_on:
       - postgres
     entrypoint: [ '/bin/bash', '-c' ]
