@@ -45,9 +45,11 @@ services:
     labels:
       # - traefik.http.routers.apimanui-router.tls=true
       - traefik.http.routers.apimanui-router.entrypoints=http
+      - traefik.http.routers.apimanui-router.rule=Host(`apiman.${APIMAN_HOSTNAME}`)
       - traefik.http.routers.apimanui-router.rule=PathPrefix(`/apiman`, `/apimanui`)
       - traefik.http.routers.apimanui-router.service=apimanui-service
       - traefik.http.services.apimanui-service.loadbalancer.server.port=8080
+
     restart: always
     healthcheck:
       # Double $$ sign in health-check predicate is to escape first $ in docker-compose syntax (prevent expansion here).
@@ -105,18 +107,14 @@ services:
     labels:
       # - traefik.http.routers.gateway-router.tls=true
       - traefik.http.routers.gateway-router.entrypoints=http
-      - traefik.http.routers.gateway-router.rule=PathPrefix(`/gateway`)
+      - traefik.http.routers.gateway-router.rule=Host(`gateway.${APIMAN_HOSTNAME}`)
       - traefik.http.routers.gateway-router.service=gateway-service
-      - traefik.http.routers.gateway-router.middlewares=stripprefix
-      - traefik.http.middlewares.stripprefix.stripprefix.prefixes=/gateway
       - traefik.http.services.gateway-service.loadbalancer.server.port=8080
       # - traefik.http.routers.gateway-management-router.tls=true
       # - traefik.http.routers.gateway-management-router.entrypoints=https
-      # - traefik.http.routers.gateway-management-router.rule=PathPrefix(`/gateway-management`)
+      # - traefik.http.routers.gateway-management-router.rule=Host(`gateway-management.${APIMAN_HOSTNAME}`)
       # - traefik.http.routers.gateway-management-router.service=gateway-management-service
       # - traefik.http.services.gateway-management-service.loadbalancer.server.port=8081
-      # - traefik.http.routers.gateway-management-router.middlewares=stripprefix
-      # - traefik.http.middlewares.stripprefix.stripprefix.prefixes=/gateway-management
     restart: always
 
   postgres:
@@ -146,11 +144,9 @@ services:
     #labels:
     #  - traefik.http.routers.postgres-router.tls=true
     #  - traefik.http.routers.postgres-router.entrypoints=https
-    #  - traefik.http.routers.postgres-router.rule=PathPrefix(`/postgres`)
+    #  - traefik.http.routers.postgres-router.rule=Host(`postgres.${APIMAN_HOSTNAME}`)
     #  - traefik.http.routers.postgres-router.service=postgres-service
     #  - traefik.http.services.postgres-service.loadbalancer.server.port=5432
-    #  - traefik.http.routers.postgres-router.middlewares=test-stripprefix
-    #  - traefik.http.middlewares.test-stripprefix.stripprefix.prefixes=/postgres
     restart: always
 
   elasticsearch:
@@ -191,7 +187,7 @@ services:
     labels:
       - traefik.http.routers.elasticsearch-router.tls=true
       - traefik.http.routers.elasticsearch-router.entrypoints=https
-      - traefik.http.routers.elasticsearch-router.rule=PathPrefix(`/elasticsearch`)
+      - traefik.http.routers.elasticsearch-router.rule=Host(`elasticsearch.${APIMAN_HOSTNAME}`)
       - traefik.http.routers.elasticsearch-router.service=elasticsearch-service
       - traefik.http.services.elasticsearch-service.loadbalancer.server.port=9200
 
@@ -221,8 +217,7 @@ services:
       - 'KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN_USERNAME}'
       - 'KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}'
       # Keycloak networking config
-      - 'KC_HOSTNAME=localhost'
-      - 'KC_HTTP_RELATIVE_PATH=auth'
+      - 'KC_HOSTNAME=auth.${APIMAN_HOSTNAME}'
       - 'KC_HTTP_PORT=8080'
       - 'KC_HOSTNAME_PORT=8080'
       - 'KC_PROXY=edge'
@@ -251,15 +246,18 @@ services:
     labels:
       #- traefik.http.routers.keycloak-router.tls=true
       - traefik.http.routers.keycloak-router.entrypoints=http
-      - traefik.http.routers.keycloak-router.rule=PathPrefix(`/auth`)
+      - traefik.http.routers.keycloak-router.rule=Host(`auth.${APIMAN_HOSTNAME}`)
       - traefik.http.routers.keycloak-router.service=keycloak-service
       - traefik.http.services.keycloak-service.loadbalancer.server.port=8080
     restart: always
 
   mock-mail-server:
     image: maildev/maildev:2.0.5
-    ports:
-      - "1080:1080"
+    labels:
+      - traefik.http.routers.mailserver-router.entrypoints=http
+      - traefik.http.routers.mailserver-router.rule=Host(`mail.${APIMAN_HOSTNAME}`)
+      - traefik.http.routers.mailserver-router.service=mailserver-service
+      - traefik.http.services.mailserver-service.loadbalancer.server.port=1080
 
   reverse-proxy:
     image: traefik:v2.8.1
