@@ -25,6 +25,7 @@ services:
       - "APIMAN_ES_PORT=${ELASTICSEARCH_PORT}"
       - "APIMAN_ES_ALLOW_SELF_SIGNED=true"
       - "APIMAN_ES_ALLOW_ANY_HOST=true"
+      - "APIMAN_ES_TRUST_ALL=true"
      # - "APIMAN_ES_USERNAME="
      # - "APIMAN_ES_PASSWORD="
       # General Apiman config
