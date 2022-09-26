@@ -40,7 +40,7 @@ jobs:
           mvnd -ntp versions:set -DnewVersion="${{ env.snapshot-version }}" -DgenerateBackupPoms=false -DprocessAllModules=true          
 
       - name: Commit release snapshot update to repository (if version changed)
-        uses: EndBug/add-and-commit@v7.2.1
+        uses: EndBug/add-and-commit@v7.5.0
         if: needs.read-version.outputs.snapshot-version-changed == 'true'
         with:
           author_name: apiman-ci
